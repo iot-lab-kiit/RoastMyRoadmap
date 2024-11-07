@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import `in`.iot.lab.roastmychoice.view.screens.AiPromptScreen
 import `in`.iot.lab.roastmychoice.view.screens.OnboardingScreen
-import `in`.iot.lab.roastmychoice.view.screens.RoastScreen
 
 @Composable
 fun AppNavigation() {
@@ -14,14 +14,12 @@ fun AppNavigation() {
         startDestination = AppScreens.OnBoardingScreen.route) {
 
         //add composable here
-        composable(route = AppScreens.OnBoardingScreen.route){
-            OnboardingScreen {
-
-            }
+        composable(AppScreens.OnBoardingScreen.route){
+            OnboardingScreen(navController)
         }
 
-        composable(route = AppScreens.AiPromptScreen.route){
-            RoastScreen()
+        composable(AppScreens.AiPromptScreen.route){
+            AiPromptScreen()
         }
     }
 }

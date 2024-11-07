@@ -24,7 +24,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +38,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import `in`.iot.lab.roastmychoice.R
 
 val GradientBrush = Brush.linearGradient(
@@ -54,7 +54,7 @@ val GradientBrush = Brush.linearGradient(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingScreen(
-    onGetStartedClick: () -> Unit,
+    navController: NavController
 ) {
 
     val labelTextStyle = TextStyle(
@@ -197,7 +197,7 @@ fun OnboardingScreen(
         Spacer(modifier = Modifier.height(28.dp))
 
         Button(
-            onClick = onGetStartedClick,
+            onClick = {  },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(66.dp)

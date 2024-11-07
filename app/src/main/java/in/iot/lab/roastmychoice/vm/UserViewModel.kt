@@ -8,6 +8,7 @@ import `in`.iot.lab.roastmychoice.data.model.CreateLevelChoiceBody
 import `in`.iot.lab.roastmychoice.data.model.CreateLevelChoiceResponse
 import `in`.iot.lab.roastmychoice.data.model.CreateUserBody
 import `in`.iot.lab.roastmychoice.data.model.CreateUserResponse
+import `in`.iot.lab.roastmychoice.data.model.GetDomainLevelsResponse
 import `in`.iot.lab.roastmychoice.data.repo.UserRepository
 import `in`.iot.lab.roastmychoice.data.utils.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,7 +34,7 @@ class UserViewModel @Inject constructor(private val repository: UserRepository) 
                 _createUserState.value =  repository.createUser(userDetails)
             }
             catch (e: Exception) {
-                Log.d("UpdateDetailsViewModel", "updateUserDetails: ${e.message}")
+                Log.d("UserViewModel", "createUserDetails: ${e.message}")
 //                _createUserState.value = UiState.Error(e.message.toString())
             }
         }
@@ -54,7 +55,27 @@ class UserViewModel @Inject constructor(private val repository: UserRepository) 
             try {
                 _createChoiceState.value = repository.createLevelChoice(choiceDetails)
             } catch (e: Exception) {
-                Log.d("UpdateDetailsViewModel", "updateUserDetails: ${e.message}")
+                Log.d("UserViewModel", "createUserChoices: ${e.message}")
+//                _createChoiceState.value = UiState.Error(e.message.toString())
+            }
+        }
+    }
+
+    private val _getDomainLevelsState: MutableStateFlow<UiState<GetDomainLevelsResponse>> = MutableStateFlow(UiState.Idle)
+    val getDomainLevelsState = _getDomainLevelsState.asStateFlow()
+
+    fun getDomainLevels(domainId: Int) {
+        getDomainLevelsDB(domainId)
+    }
+
+    private fun getDomainLevelsDB(domainId: Int) {
+        _getDomainLevelsState.value = UiState.Loading
+
+        viewModelScope.launch {
+            try {
+                _getDomainLevelsState.value = repository.getDomainLevels(domainId)
+            } catch (e: Exception) {
+                Log.d("UpdateDetailsViewModel", "getDomainLevels: ${e.message}")
 //                _createUserState.value = UiState.Error(e.message.toString())
             }
         }
