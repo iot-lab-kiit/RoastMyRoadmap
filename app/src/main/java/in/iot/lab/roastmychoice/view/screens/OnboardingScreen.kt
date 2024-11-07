@@ -54,26 +54,26 @@ val GradientBrush = Brush.linearGradient(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingScreen(
-    valueUserId: MutableState<String>,
-    valueRollNumber: MutableState<String>,
     onGetStartedClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    labelTextStyle: TextStyle = TextStyle(
+) {
+
+    val labelTextStyle = TextStyle(
         fontWeight = FontWeight.Normal,
         color = Color.White,
         fontSize = 16.sp
-    ),
-    textFieldStyle: TextStyle = TextStyle(
+    )
+    val textFieldStyle = TextStyle(
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
-        color = Color.White
-    ),
-) {
+        color = Color.Black
+    )
+    var name by remember { mutableStateOf("") }
+    var rollNo by remember { mutableStateOf("") }
 
     var selectedChip by remember { mutableStateOf<String?>(null) }
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .padding(top = 80.dp, start = 16.dp, end = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -99,9 +99,9 @@ fun OnboardingScreen(
                 )
         ) {
             OutlinedTextField(
-                value = valueUserId.value,
-                onValueChange = { valueUserId.value = it },
-                label = { Text("User ID", style = labelTextStyle) },
+                value = name,
+                onValueChange = { name = it },
+                label = { Text("User ID", style = labelTextStyle, color = Color.Black.copy(0.5f)) },
                 singleLine = true,
                 textStyle = textFieldStyle,
                 modifier = Modifier
@@ -133,9 +133,9 @@ fun OnboardingScreen(
                 )
         ) {
             OutlinedTextField(
-                value = valueRollNumber.value,
-                onValueChange = { valueRollNumber.value = it },
-                label = { Text("Roll Number", style = labelTextStyle) },
+                value = rollNo,
+                onValueChange = { rollNo = it },
+                label = { Text("Roll Number", style = labelTextStyle, color = Color.Black.copy(0.5f)) },
                 singleLine = true,
                 textStyle = textFieldStyle,
                 modifier = Modifier

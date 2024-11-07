@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun RoastScreen(modifier: Modifier = Modifier) {
+fun RoastScreen() {
 
 
     Surface(
