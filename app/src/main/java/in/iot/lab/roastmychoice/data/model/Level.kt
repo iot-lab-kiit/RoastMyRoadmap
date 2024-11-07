@@ -1,4 +1,4 @@
-package in.iot.lab.roastmychoice.data.model
+package `in`.iot.lab.roastmychoice.data.model
 
 data class Level(
     val id: Int,

@@ -3,7 +3,7 @@ package `in`.iot.lab.roastmychoice.data.remote
 import `in`.iot.lab.roastmychoice.data.model.CreateLevelChoiceBody
 import `in`.iot.lab.roastmychoice.data.model.CreateUserBody
 import `in`.iot.lab.roastmychoice.data.model.CreateUserResponse
-import iot.lab.roastmychoice.data.model.CreateLevelChoiceResponse
+import `in`.iot.lab.roastmychoice.data.model.CreateLevelChoiceResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST

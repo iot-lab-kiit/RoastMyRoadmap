@@ -5,11 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.iot.lab.roastmychoice.data.model.CreateLevelChoiceBody
+import `in`.iot.lab.roastmychoice.data.model.CreateLevelChoiceResponse
 import `in`.iot.lab.roastmychoice.data.model.CreateUserBody
 import `in`.iot.lab.roastmychoice.data.model.CreateUserResponse
 import `in`.iot.lab.roastmychoice.data.repo.UserRepository
 import `in`.iot.lab.roastmychoice.data.utils.UiState
-import iot.lab.roastmychoice.data.model.CreateLevelChoiceResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch

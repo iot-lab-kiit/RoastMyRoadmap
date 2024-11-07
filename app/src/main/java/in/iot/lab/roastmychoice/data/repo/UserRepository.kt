@@ -5,7 +5,7 @@ import `in`.iot.lab.roastmychoice.data.model.CreateUserBody
 import `in`.iot.lab.roastmychoice.data.model.CreateUserResponse
 import `in`.iot.lab.roastmychoice.data.remote.ApiService
 import `in`.iot.lab.roastmychoice.data.utils.UiState
-import iot.lab.roastmychoice.data.model.CreateLevelChoiceResponse
+import `in`.iot.lab.roastmychoice.data.model.CreateLevelChoiceResponse
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(private val api: ApiService) {
