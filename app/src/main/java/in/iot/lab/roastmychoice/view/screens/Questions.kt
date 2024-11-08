@@ -70,12 +70,12 @@ fun Questions(
                         setEvent(AppEvents.ResetChoiceLevel)
                     },
                     onTryAgain = {
-                        // Do Nothing
+                        setEvent(AppEvents.ResetChoiceLevel)
                     }
                 )
             },
             onTryAgain = {
-                // Do Nothing
+                setEvent(AppEvents.ResetChoiceLevel)
             }
         )
     }
