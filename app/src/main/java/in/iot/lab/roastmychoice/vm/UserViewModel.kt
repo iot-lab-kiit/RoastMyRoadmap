@@ -91,12 +91,15 @@ class UserViewModel @Inject constructor(private val repository: UserRepository) 
         }
     }
 
+    private val _deleteState: MutableStateFlow<UiState<Unit>> = MutableStateFlow(UiState.Idle)
+    val deleteState = _deleteState.asStateFlow()
+
     private fun deleteUser() {
         viewModelScope.launch {
             repository
                 .deleteUser(userId ?: 0)
                 .collect {
-                    // To be done later
+                    _deleteState.value = it
                 }
         }
     }
@@ -126,6 +129,10 @@ class UserViewModel @Inject constructor(private val repository: UserRepository) 
 
             is AppEvents.DeleteUser -> {
                 deleteUser()
+            }
+
+            is AppEvents.ResetDeleteState -> {
+                _deleteState.value = UiState.Idle
             }
         }
     }

@@ -1,6 +1,8 @@
 package `in`.iot.lab.roastmychoice.view.screens
 
+import android.app.Activity
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -45,6 +47,11 @@ fun OnboardingScreen(
     createUserState: UiState<CreateUserResponse>,
     setEvent: (AppEvents) -> Unit
 ) {
+
+    val activity = LocalContext.current as Activity
+    BackHandler {
+        activity.finish()
+    }
 
     AppScreen {
 

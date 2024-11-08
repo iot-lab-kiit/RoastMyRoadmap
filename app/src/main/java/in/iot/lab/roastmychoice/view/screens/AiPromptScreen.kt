@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +29,7 @@ import `in`.iot.lab.roastmychoice.view.navigation.ONBOARDING_SCREEN
 @Composable
 fun AiPromptScreen(
     roastDataState: UiState<GetAiModelResponse>,
+    deleteUserState: UiState<Unit>,
     navController: NavController,
     setEvent: (AppEvents) -> Unit
 ) {
@@ -39,15 +41,36 @@ fun AiPromptScreen(
             }
 
             is UiState.Loading -> {
-                Text(text = "Loading")
+                CircularProgressIndicator()
             }
 
             is UiState.Success -> {
-                AiPromptScreenIdle(
-                    roastData = roastDataState.data,
-                    navController = navController,
-                    setEvent = setEvent
-                )
+
+                when (deleteUserState) {
+                    is UiState.Idle -> {
+                        AiPromptScreenIdle(
+                            roastData = roastDataState.data,
+                            setEvent = setEvent
+                        )
+                    }
+
+                    is UiState.Loading -> {
+                        CircularProgressIndicator()
+                    }
+
+                    is UiState.Success -> {
+                        navController.navigate(ONBOARDING_SCREEN)
+                        setEvent(AppEvents.ResetDeleteState)
+                    }
+
+                    is UiState.NoInternetError -> {
+
+                    }
+
+                    is UiState.Error -> {
+
+                    }
+                }
             }
 
             else -> {
@@ -61,7 +84,6 @@ fun AiPromptScreen(
 @Composable
 fun AiPromptScreenIdle(
     roastData: GetAiModelResponse,
-    navController: NavController,
     setEvent: (AppEvents) -> Unit
 ) {
 
@@ -99,7 +121,6 @@ fun AiPromptScreenIdle(
             text = "Try Again"
         ) {
             setEvent(AppEvents.DeleteUser)
-            navController.navigate(ONBOARDING_SCREEN)
         }
     }
 }

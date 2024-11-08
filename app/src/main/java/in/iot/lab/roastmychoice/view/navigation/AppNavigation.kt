@@ -3,8 +3,6 @@ package `in`.iot.lab.roastmychoice.view.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -57,9 +55,11 @@ fun AppNavigation(
         composable(AI_PROMPT_SCREEN) {
 
             val roastDataState = viewModel.roastData.collectAsState().value
+            val deleteUserState = viewModel.deleteState.collectAsState().value
             AiPromptScreen(
-                navController = navController,
                 roastDataState = roastDataState,
+                deleteUserState = deleteUserState,
+                navController = navController,
                 setEvent = viewModel::uiListener
             )
         }
