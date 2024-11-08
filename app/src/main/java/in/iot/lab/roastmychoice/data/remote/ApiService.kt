@@ -8,6 +8,7 @@ import `in`.iot.lab.roastmychoice.data.model.GetAiModelResponse
 import `in`.iot.lab.roastmychoice.data.model.GetDomainLevelsResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -35,4 +36,9 @@ interface ApiService {
     suspend fun getAiResponse(
         @Path("userId") userId: Int
     ): Response<GetAiModelResponse>
+
+    @DELETE("users/{userId}")
+    suspend fun deleteUser(
+        @Path("userId") userId: Int
+    ) : Response<Unit>
 }

@@ -105,4 +105,19 @@ class UserViewModel @Inject constructor(private val repository: UserRepository) 
             }
         }
     }
+
+    fun deleteUser(userId: Int) {
+        deleteUserDB(userId)
+    }
+
+    private fun deleteUserDB(userId: Int) {
+        viewModelScope.launch {
+            try {
+                repository.deleteUser(userId)
+            }
+            catch (e: Exception) {
+                Log.d("UpdateDetailsViewModel", "deleteUser: ${e.message}")
+            }
+        }
+    }
 }

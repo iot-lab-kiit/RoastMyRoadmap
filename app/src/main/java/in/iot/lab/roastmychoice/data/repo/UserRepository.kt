@@ -43,4 +43,6 @@ class UserRepository @Inject constructor(private val api: ApiService) {
             }
         return UiState.Error(response.message())
     }
+
+    suspend fun deleteUser(userId: Int) = api.deleteUser(userId)
 }
