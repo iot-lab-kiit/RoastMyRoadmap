@@ -12,6 +12,11 @@ import `in`.iot.lab.roastmychoice.view.screens.OnboardingScreen
 import `in`.iot.lab.roastmychoice.view.screens.Questions
 import `in`.iot.lab.roastmychoice.vm.UserViewModel
 
+const val ONBOARDING_SCREEN = "onboarding_screen"
+const val QUESTION_SCREEN = "questions_screen"
+const val AI_PROMPT_SCREEN = "ai_prompt_screen"
+
+
 @Composable
 fun AppNavigation(
     viewModel: UserViewModel = hiltViewModel(),
@@ -19,15 +24,16 @@ fun AppNavigation(
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = AppScreens.OnBoardingScreen.route
+        startDestination = ONBOARDING_SCREEN
     ) {
 
-        //add composable here
-        composable(AppScreens.OnBoardingScreen.route) {
+        //On Boarding Screen
+        composable(ONBOARDING_SCREEN) {
             OnboardingScreen(navController, viewModel)
         }
 
-        val questionScreenRoute = AppScreens.QuestionsScreen.route
+        // Question Screen
+        val questionScreenRoute = QUESTION_SCREEN
         composable("$questionScreenRoute/{userId}/{domainId}",
             arguments = listOf(
                 navArgument(name = "userId") {
@@ -54,7 +60,7 @@ fun AppNavigation(
             }
         }
 
-        val aiPromptScreenRoute = AppScreens.AiPromptScreen.route
+        val aiPromptScreenRoute = AI_PROMPT_SCREEN
         composable("$aiPromptScreenRoute/{userId}",
             arguments = listOf(
                 navArgument(name = "userId") {

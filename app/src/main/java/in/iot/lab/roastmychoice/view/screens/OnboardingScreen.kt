@@ -26,7 +26,7 @@ import `in`.iot.lab.roastmychoice.view.components.AppFilterChip
 import `in`.iot.lab.roastmychoice.view.components.AppScreen
 import `in`.iot.lab.roastmychoice.view.components.OnBoardingImage
 import `in`.iot.lab.roastmychoice.view.components.PrimaryButton
-import `in`.iot.lab.roastmychoice.view.navigation.AppScreens
+import `in`.iot.lab.roastmychoice.view.navigation.QUESTION_SCREEN
 import `in`.iot.lab.roastmychoice.vm.UserViewModel
 
 
@@ -54,7 +54,7 @@ fun OnboardingScreen(
                 val userId = data.data.id
                 val domainId = data.data.domainId
 
-                navController.navigate(AppScreens.QuestionsScreen.route + "/${userId}/${domainId}")
+                navController.navigate(QUESTION_SCREEN + "/${userId}/${domainId}")
                 viewModel.resetCreateUserState()
             }
 

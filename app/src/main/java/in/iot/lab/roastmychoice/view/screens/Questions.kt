@@ -30,12 +30,11 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import `in`.iot.lab.roastmychoice.R
 import `in`.iot.lab.roastmychoice.data.model.CreateLevelChoiceBody
 import `in`.iot.lab.roastmychoice.data.utils.UiState
-import `in`.iot.lab.roastmychoice.view.navigation.AppScreens
+import `in`.iot.lab.roastmychoice.view.navigation.AI_PROMPT_SCREEN
 import `in`.iot.lab.roastmychoice.vm.UserViewModel
 
 @Composable
@@ -43,13 +42,14 @@ fun Questions(
     viewModel: UserViewModel,
     navController: NavController,
     userId: Int,
-    domainId : Int
+    domainId: Int
 ) {
     val data = viewModel.getDomainLevelsState.collectAsState().value
     when (data) {
         is UiState.Idle -> {
             viewModel.getDomainLevels(domainId)
         }
+
         is UiState.Loading -> {
             CircularProgressIndicator(
                 color = Color.Blue,
@@ -58,6 +58,7 @@ fun Questions(
                 trackColor = Color.Gray
             )
         }
+
         is UiState.Success -> {
             val currentQuestionIndex = remember { mutableStateOf(0) }
             val currentQuestion = data.data.levels[currentQuestionIndex.value]
@@ -110,7 +111,10 @@ fun Questions(
                     ) {
                         Column(
                             modifier = Modifier.fillMaxWidth(0.9f),
-                            verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+                            verticalArrangement = Arrangement.spacedBy(
+                                16.dp,
+                                Alignment.CenterVertically
+                            ),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             currentQuestion.options.forEachIndexed { index, question ->
@@ -124,9 +128,8 @@ fun Questions(
                                     )
                                     if (currentQuestionIndex.value < data.data.levels.size - 1) {
                                         currentQuestionIndex.value++
-                                    }
-                                    else {
-                                        navController.navigate(AppScreens.AiPromptScreen.route + "/${userId}")
+                                    } else {
+                                        navController.navigate(AI_PROMPT_SCREEN + "/${userId}")
                                     }
                                 }, text = question)
                             }
@@ -135,6 +138,7 @@ fun Questions(
                 }
             }
         }
+
         else -> {}
     }
 }
