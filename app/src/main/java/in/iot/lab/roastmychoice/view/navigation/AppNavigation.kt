@@ -45,10 +45,12 @@ fun AppNavigation(
 
             val domainDataState = viewModel.domainState.collectAsState().value
             val choiceState = viewModel.createChoiceState.collectAsState().value
+            val deleteState = viewModel.deleteState.collectAsState().value
 
             Questions(
                 domainDataState = domainDataState,
                 choiceState = choiceState,
+                deleteState = deleteState,
                 navController = navController,
                 setEvent = viewModel::uiListener
             )

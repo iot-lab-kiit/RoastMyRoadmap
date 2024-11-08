@@ -1,5 +1,6 @@
 package `in`.iot.lab.roastmychoice.view.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +34,10 @@ fun AiPromptScreen(
     navController: NavController,
     setEvent: (AppEvents) -> Unit
 ) {
+
+    BackHandler {
+        setEvent(AppEvents.DeleteUser)
+    }
 
     AppScreen {
         roastDataState.HandleUiState(

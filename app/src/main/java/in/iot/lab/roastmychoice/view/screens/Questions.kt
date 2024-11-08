@@ -1,5 +1,6 @@
 package `in`.iot.lab.roastmychoice.view.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,17 +34,34 @@ import `in`.iot.lab.roastmychoice.view.components.AppScreen
 import `in`.iot.lab.roastmychoice.view.components.PrimaryButton
 import `in`.iot.lab.roastmychoice.view.events.AppEvents
 import `in`.iot.lab.roastmychoice.view.navigation.AI_PROMPT_SCREEN
+import `in`.iot.lab.roastmychoice.view.navigation.ONBOARDING_SCREEN
 
 
 @Composable
 fun Questions(
     domainDataState: UiState<GetDomainLevelsResponse>,
     choiceState: UiState<CreateLevelChoiceResponse>,
+    deleteState: UiState<Unit>,
     navController: NavController,
     setEvent: (AppEvents) -> Unit
 ) {
 
+    BackHandler {
+        setEvent(AppEvents.DeleteUser)
+    }
+
     AppScreen {
+
+        deleteState.HandleUiState(
+            successBlock = {
+                navController.navigate(ONBOARDING_SCREEN)
+                setEvent(AppEvents.ResetAppState)
+            },
+            onTryAgain = {
+                setEvent(AppEvents.DeleteUser)
+            }
+        )
+
         domainDataState.HandleUiState(
             idleBlock = {
                 setEvent(AppEvents.FetchDomainData)
