@@ -1,11 +1,16 @@
 package `in`.iot.lab.roastmychoice.view.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +21,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import `in`.iot.lab.roastmychoice.data.model.CreateUserResponse
@@ -55,11 +64,12 @@ fun OnboardingScreen(
             }
 
             is UiState.Error -> {
+                // TODO :- Show Error Dialog here
                 Text(text = createUserState.message)
             }
 
             is UiState.NoInternetError -> {
-
+                // TODO :- Show Internet Error Animation
             }
         }
     }
@@ -77,6 +87,8 @@ fun OnBoardingScreenIdle(
     var rollNo by remember { mutableStateOf("") }
     var selectedChip by remember { mutableIntStateOf(0) }
 
+    val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -93,6 +105,10 @@ fun OnBoardingScreenIdle(
         AppTextField(
             value = name,
             title = "User name",
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+            keyboardActions = KeyboardActions(onNext = {
+                focusManager.moveFocus(FocusDirection.Down)
+            }),
             onValueChange = { name = it }
         )
 
@@ -100,6 +116,10 @@ fun OnBoardingScreenIdle(
         AppTextField(
             value = rollNo,
             title = "Roll Number",
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(onDone = {
+                focusManager.clearFocus()
+            }),
             onValueChange = { rollNo = it }
         )
 
@@ -125,8 +145,22 @@ fun OnBoardingScreenIdle(
         }
 
         // Primary Button
-        PrimaryButton(text = "Get Started") {
-            setEvent(AppEvents.CreateUser(name = name, rollNo = rollNo, domainId = selectedChip))
+        PrimaryButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            text = "Get Started"
+        ) {
+            if (name.isEmpty() || rollNo.isEmpty() || selectedChip == 0)
+                Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT).show()
+            else
+                setEvent(
+                    AppEvents.CreateUser(
+                        name = name,
+                        rollNo = rollNo,
+                        domainId = selectedChip
+                    )
+                )
         }
     }
 }

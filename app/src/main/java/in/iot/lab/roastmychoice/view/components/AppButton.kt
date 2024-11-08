@@ -2,7 +2,6 @@ package `in`.iot.lab.roastmychoice.view.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -18,6 +17,7 @@ import `in`.iot.lab.roastmychoice.view.theme.GradientBrush
 
 @Composable
 fun PrimaryButton(
+    modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit
 ) {
@@ -25,9 +25,7 @@ fun PrimaryButton(
     // Primary Button
     Button(
         onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+        modifier = modifier
             .background(
                 brush = GradientBrush,
                 shape = RoundedCornerShape(16.dp)
