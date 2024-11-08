@@ -17,7 +17,7 @@ object AppModule {
     @Provides
     fun provideApi(): ApiService {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.252.77:8080/")
+            .baseUrl("https://rmr.iotkiit.in/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiService::class.java)

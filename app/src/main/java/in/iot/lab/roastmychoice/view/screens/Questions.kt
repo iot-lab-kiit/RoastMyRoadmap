@@ -42,12 +42,13 @@ import `in`.iot.lab.roastmychoice.vm.UserViewModel
 fun Questions(
     viewModel: UserViewModel = hiltViewModel(),
     navController: NavController,
-    userId: Int
+    userId: Int,
+    domainId : Int
 ) {
     val data = viewModel.getDomainLevelsState.collectAsState().value
     when (data) {
         is UiState.Idle -> {
-            viewModel.getDomainLevels(155)
+            viewModel.getDomainLevels(domainId)
         }
         is UiState.Loading -> {
             CircularProgressIndicator(

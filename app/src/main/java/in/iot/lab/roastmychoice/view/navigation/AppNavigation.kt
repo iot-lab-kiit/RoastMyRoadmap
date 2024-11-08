@@ -13,25 +13,38 @@ import `in`.iot.lab.roastmychoice.view.screens.Questions
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController,
-        startDestination = AppScreens.OnBoardingScreen.route) {
+    NavHost(
+        navController = navController,
+        startDestination = AppScreens.OnBoardingScreen.route
+    ) {
 
         //add composable here
-        composable(AppScreens.OnBoardingScreen.route){
+        composable(AppScreens.OnBoardingScreen.route) {
             OnboardingScreen(navController)
         }
 
         val questionScreenRoute = AppScreens.QuestionsScreen.route
-        composable("$questionScreenRoute/{userId}",
+        composable("$questionScreenRoute/{userId}/{domainId}",
             arguments = listOf(
                 navArgument(name = "userId") {
+                    type = NavType.IntType
+                },
+                navArgument(name = "domainId") {
                     type = NavType.IntType
                 }
             )
         ) { backStackEntry ->
-            backStackEntry.arguments?.getInt("userId").let {
-                if(it != null) {
-                    Questions(navController = navController, userId = it)
+
+            backStackEntry.arguments?.let {
+                it.getInt("userId").let { userId ->
+                    it.getInt("domainId").let { domainId ->
+                        Questions(
+                            navController = navController,
+                            userId = userId,
+                            domainId = domainId
+                        )
+                    }
+
                 }
             }
         }
@@ -45,7 +58,7 @@ fun AppNavigation() {
             )
         ) { backStackEntry ->
             backStackEntry.arguments?.getInt("userId").let {
-                if(it != null) {
+                if (it != null) {
                     AiPromptScreen(navController = navController, userId = it)
                 }
             }
