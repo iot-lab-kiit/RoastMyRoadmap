@@ -23,9 +23,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import `in`.iot.lab.roastmychoice.data.utils.UiState
+import `in`.iot.lab.roastmychoice.ui.theme.GradientBrush
 import `in`.iot.lab.roastmychoice.view.navigation.AppScreens
 import `in`.iot.lab.roastmychoice.vm.UserViewModel
 
@@ -33,7 +33,7 @@ import `in`.iot.lab.roastmychoice.vm.UserViewModel
 @Composable
 fun AiPromptScreen(
     navController: NavController,
-    viewModel: UserViewModel = hiltViewModel(),
+    viewModel: UserViewModel,
     userId: Int
 ) {
     Surface(

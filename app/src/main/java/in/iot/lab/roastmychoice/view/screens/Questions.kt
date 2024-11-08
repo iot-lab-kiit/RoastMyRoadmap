@@ -40,7 +40,7 @@ import `in`.iot.lab.roastmychoice.vm.UserViewModel
 
 @Composable
 fun Questions(
-    viewModel: UserViewModel = hiltViewModel(),
+    viewModel: UserViewModel,
     navController: NavController,
     userId: Int,
     domainId : Int

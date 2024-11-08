@@ -1,6 +1,7 @@
 package `in`.iot.lab.roastmychoice.view.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -9,9 +10,12 @@ import androidx.navigation.navArgument
 import `in`.iot.lab.roastmychoice.view.screens.AiPromptScreen
 import `in`.iot.lab.roastmychoice.view.screens.OnboardingScreen
 import `in`.iot.lab.roastmychoice.view.screens.Questions
+import `in`.iot.lab.roastmychoice.vm.UserViewModel
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(
+    viewModel: UserViewModel = hiltViewModel(),
+) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
@@ -20,7 +24,7 @@ fun AppNavigation() {
 
         //add composable here
         composable(AppScreens.OnBoardingScreen.route) {
-            OnboardingScreen(navController)
+            OnboardingScreen(navController, viewModel)
         }
 
         val questionScreenRoute = AppScreens.QuestionsScreen.route
@@ -39,6 +43,7 @@ fun AppNavigation() {
                 it.getInt("userId").let { userId ->
                     it.getInt("domainId").let { domainId ->
                         Questions(
+                            viewModel = viewModel,
                             navController = navController,
                             userId = userId,
                             domainId = domainId
@@ -59,12 +64,13 @@ fun AppNavigation() {
         ) { backStackEntry ->
             backStackEntry.arguments?.getInt("userId").let {
                 if (it != null) {
-                    AiPromptScreen(navController = navController, userId = it)
+                    AiPromptScreen(
+                        navController = navController,
+                        userId = it,
+                        viewModel = viewModel
+                    )
                 }
             }
         }
-//        composable(AppScreens.AiPromptScreen.route){
-//            AiPromptScreen(navController)
-//        }
     }
 }
