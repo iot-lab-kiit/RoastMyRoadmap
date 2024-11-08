@@ -5,6 +5,7 @@ sealed class AppEvents {
     data object ResetCreateState : AppEvents()
     data object FetchDomainData : AppEvents()
     data class CreateLevelChoice(val levelId: Int, val selected: Int) : AppEvents()
+    data object ResetChoiceLevel : AppEvents()
     data object FetchRoast : AppEvents()
     data object DeleteUser : AppEvents()
     data object ResetDeleteState : AppEvents()

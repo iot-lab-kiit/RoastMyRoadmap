@@ -123,6 +123,10 @@ class UserViewModel @Inject constructor(private val repository: UserRepository) 
                 createChoice(levelId = event.levelId, selected = event.selected)
             }
 
+            is AppEvents.ResetChoiceLevel -> {
+                _createChoiceState.value = UiState.Idle
+            }
+
             is AppEvents.FetchRoast -> {
                 fetchRoastData()
             }

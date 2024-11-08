@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import `in`.iot.lab.roastmychoice.R
+import `in`.iot.lab.roastmychoice.data.model.CreateLevelChoiceResponse
 import `in`.iot.lab.roastmychoice.data.model.GetDomainLevelsResponse
 import `in`.iot.lab.roastmychoice.state.HandleUiState
 import `in`.iot.lab.roastmychoice.state.UiState
@@ -37,6 +38,7 @@ import `in`.iot.lab.roastmychoice.view.navigation.AI_PROMPT_SCREEN
 @Composable
 fun Questions(
     domainDataState: UiState<GetDomainLevelsResponse>,
+    choiceState: UiState<CreateLevelChoiceResponse>,
     navController: NavController,
     setEvent: (AppEvents) -> Unit
 ) {
@@ -46,15 +48,34 @@ fun Questions(
             idleBlock = {
                 setEvent(AppEvents.FetchDomainData)
             },
-            successBlock = {
-                QuestionScreenIdle(
-                    domainData = it,
-                    navController = navController,
-                    setEvent = setEvent
+            successBlock = { domainData ->
+
+                // Current Question Index
+                var currentLevelIndex by remember { mutableIntStateOf(0) }
+
+                choiceState.HandleUiState(
+                    idleBlock = {
+                        QuestionScreenIdle(
+                            domainData = domainData,
+                            currentLevelIndex = currentLevelIndex,
+                            setEvent = setEvent
+                        )
+                    },
+                    successBlock = {
+                        if (currentLevelIndex < domainData.levels.size - 1)
+                            currentLevelIndex++
+                        else
+                            navController.navigate(AI_PROMPT_SCREEN)
+
+                        setEvent(AppEvents.ResetChoiceLevel)
+                    },
+                    onTryAgain = {
+                        // Do Nothing
+                    }
                 )
             },
             onTryAgain = {
-
+                // Do Nothing
             }
         )
     }
@@ -64,12 +85,10 @@ fun Questions(
 @Composable
 fun QuestionScreenIdle(
     domainData: GetDomainLevelsResponse,
-    navController: NavController,
+    currentLevelIndex: Int,
     setEvent: (AppEvents) -> Unit
 ) {
 
-    // Current Question Index
-    var currentLevelIndex by remember { mutableIntStateOf(0) }
 
     // Current Question
     val currentLevel = domainData.levels[currentLevelIndex]
@@ -126,12 +145,6 @@ fun QuestionScreenIdle(
                             selected = index
                         )
                     )
-
-                    // Forwarding to the next Level
-                    if (currentLevelIndex < domainData.levels.size - 1)
-                        currentLevelIndex++
-                    else
-                        navController.navigate(AI_PROMPT_SCREEN)
                 }
             }
         }

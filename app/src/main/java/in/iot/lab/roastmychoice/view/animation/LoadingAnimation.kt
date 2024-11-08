@@ -49,7 +49,7 @@ fun LoadingAnimation(
     ) {
         LottieAnimation(
             composition = composition,
-            iterations = 4,
+            iterations = 10,
             modifier = Modifier.size(200.dp)
         )
     }

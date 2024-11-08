@@ -44,8 +44,11 @@ fun AppNavigation(
         composable(QUESTION_SCREEN) {
 
             val domainDataState = viewModel.domainState.collectAsState().value
+            val choiceState = viewModel.createChoiceState.collectAsState().value
+
             Questions(
                 domainDataState = domainDataState,
+                choiceState = choiceState,
                 navController = navController,
                 setEvent = viewModel::uiListener
             )
