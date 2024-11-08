@@ -16,10 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 
 @Composable
-fun AiPromptScreen() {
+fun AiPromptScreen(
+    navController: NavController,
+    userId: Int
+) {
 
 
     Surface(
@@ -46,7 +50,7 @@ fun AiPromptScreen() {
             ) {
                 Text(
                     text = "\n" +
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam semper mattis tortor sit amet convallis. Ut eget tincidunt nisi, quis aliquet velit. Mauris quis purus elementum, tincidunt metus id, finibus ante. Ut a efficitur libero. Aliquam id justo at nulla vehicula congue in in metus. Cras eget lacus lectus. Curabitur."
+                            "${userId} Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam semper mattis tortor sit amet convallis. Ut eget tincidunt nisi, quis aliquet velit. Mauris quis purus elementum, tincidunt metus id, finibus ante. Ut a efficitur libero. Aliquam id justo at nulla vehicula congue in in metus. Cras eget lacus lectus. Curabitur."
                 )
             }
         }

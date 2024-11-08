@@ -22,6 +22,10 @@ class UserViewModel @Inject constructor(private val repository: UserRepository) 
     private val _createUserState: MutableStateFlow<UiState<CreateUserResponse>> = MutableStateFlow(UiState.Idle)
     val createUserState = _createUserState.asStateFlow()
 
+    fun resetCreateUserState() {
+        _createUserState.value = UiState.Idle
+    }
+
     fun createUser(userDetails : CreateUserBody) {
         createUserDB(userDetails)
     }
@@ -31,11 +35,11 @@ class UserViewModel @Inject constructor(private val repository: UserRepository) 
 
         viewModelScope.launch {
             try {
-                _createUserState.value =  repository.createUser(userDetails)
+                val response = repository.createUser(userDetails)
+                _createUserState.value = response
             }
             catch (e: Exception) {
                 Log.d("UserViewModel", "createUserDetails: ${e.message}")
-//                _createUserState.value = UiState.Error(e.message.toString())
             }
         }
     }

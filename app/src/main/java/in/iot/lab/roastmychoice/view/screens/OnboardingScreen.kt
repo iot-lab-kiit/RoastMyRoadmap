@@ -1,5 +1,6 @@
 package `in`.iot.lab.roastmychoice.view.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,6 +25,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,13 +35,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import `in`.iot.lab.roastmychoice.R
+import `in`.iot.lab.roastmychoice.data.model.CreateUserBody
+import `in`.iot.lab.roastmychoice.data.utils.UiState
+import `in`.iot.lab.roastmychoice.view.navigation.AppScreens
+import `in`.iot.lab.roastmychoice.vm.UserViewModel
 
 val GradientBrush = Brush.linearGradient(
     colors = listOf(
@@ -54,7 +62,8 @@ val GradientBrush = Brush.linearGradient(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: UserViewModel = hiltViewModel()
 ) {
 
     val labelTextStyle = TextStyle(
@@ -65,27 +74,30 @@ fun OnboardingScreen(
     val textFieldStyle = TextStyle(
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
-        color = Color.Black
+        color = Color.White
     )
     var name by remember { mutableStateOf("") }
     var rollNo by remember { mutableStateOf("") }
 
-    var selectedChip by remember { mutableStateOf<String?>(null) }
+    var selectedChip by remember { mutableStateOf(0) }
+
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xFF041529))
             .padding(top = 80.dp, start = 16.dp, end = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
         Image(
-            painter = painterResource(id = R.drawable.logo),
+            painter = painterResource(id = R.drawable.innovance_logo),
             contentDescription = "Logo",
-            modifier = Modifier.size(450.dp)
+            modifier = Modifier.size(250.dp)
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         // User ID Text Field with Gradient Border Only
         Box(
@@ -101,7 +113,7 @@ fun OnboardingScreen(
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text("User ID", style = labelTextStyle, color = Color.Black.copy(0.5f)) },
+                label = { Text("User ID", style = labelTextStyle, color = Color.White) },
                 singleLine = true,
                 textStyle = textFieldStyle,
                 modifier = Modifier
@@ -135,7 +147,7 @@ fun OnboardingScreen(
             OutlinedTextField(
                 value = rollNo,
                 onValueChange = { rollNo = it },
-                label = { Text("Roll Number", style = labelTextStyle, color = Color.Black.copy(0.5f)) },
+                label = { Text("Roll Number", style = labelTextStyle, color = Color.White) },
                 singleLine = true,
                 textStyle = textFieldStyle,
                 modifier = Modifier
@@ -165,39 +177,48 @@ fun OnboardingScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                ClickableChip(text = "App Dev", isSelected = selectedChip == "App Dev") {
-                    selectedChip = "App Dev"
+                ClickableChip(text = "App Dev", isSelected = selectedChip == 155) {
+                    selectedChip = 155
                 }
                 ClickableChip(
                     text = "Cybersecurity",
-                    isSelected = selectedChip == "Cybersecurity"
+                    isSelected = selectedChip == 2
                 ) {
-                    selectedChip = "Cybersecurity"
+                    selectedChip = 2
                 }
-                ClickableChip(text = "AI/ML", isSelected = selectedChip == "AI/ML") {
-                    selectedChip = "AI/ML"
+                ClickableChip(text = "AI/ML", isSelected = selectedChip == 3) {
+                    selectedChip = 3
                 }
             }
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                ClickableChip(text = "Web Dev", isSelected = selectedChip == "Web Dev") {
-                    selectedChip = "Web Dev"
+                ClickableChip(text = "Web Dev", isSelected = selectedChip == 4) {
+                    selectedChip = 4
                 }
-                ClickableChip(text = "IoT", isSelected = selectedChip == "IoT") {
-                    selectedChip = "IoT"
+                ClickableChip(text = "IoT", isSelected = selectedChip == 5) {
+                    selectedChip = 5
                 }
-                ClickableChip(text = "CP", isSelected = selectedChip == "CP") {
-                    selectedChip = "CP"
+                ClickableChip(text = "CP", isSelected = selectedChip == 6) {
+                    selectedChip = 6
                 }
             }
         }
 
         Spacer(modifier = Modifier.height(28.dp))
 
+        val data = viewModel.createUserState.collectAsState().value
         Button(
-            onClick = {  },
+            onClick = {
+                viewModel.createUser(
+                    userDetails = CreateUserBody(
+                        domainId = selectedChip,
+                        name = name,
+                        rollNo = rollNo
+                    )
+                )
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(66.dp)
@@ -214,6 +235,15 @@ fun OnboardingScreen(
                 modifier = Modifier.padding(vertical = 20.dp)
             )
         }
+        when (data) {
+            is UiState.Loading -> Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
+            is UiState.Success -> {
+                navController.navigate(AppScreens.QuestionsScreen.route + "/${data.data.id}")
+                viewModel.resetCreateUserState()
+            }
+            else -> {
+            }
+        }
     }
 }
 
@@ -224,7 +254,7 @@ fun ClickableChip(text: String, isSelected: Boolean, onClick: () -> Unit) {
         modifier = Modifier
             .clickable { onClick() }
             .background(
-                color = if (isSelected) Color(0xFF6200EA) else Color(0xFFE0E0E0),
+                color = if (isSelected) Color(0xFF7B0FFF) else Color.White,
                 shape = RoundedCornerShape(16.dp)
             )
             .padding(horizontal = 16.dp, vertical = 8.dp)
