@@ -16,62 +16,87 @@ class UserRepository @Inject constructor(private val api: ApiService) {
 
     suspend fun createUser(userDetails: CreateUserBody): Flow<UiState<CreateUserResponse>> {
         return flow {
-            emit(UiState.Loading)
+            try {
 
-            val response = api.createUser(userDetails)
-            if (response.isSuccessful)
-                emit(UiState.Success(response.body()!!))
-            else
-                emit(UiState.Error(response.message()))
+                emit(UiState.Loading)
+
+                val response = api.createUser(userDetails)
+                if (response.isSuccessful)
+                    emit(UiState.Success(response.body()!!))
+                else
+                    emit(UiState.Error(response.message()))
+            } catch (e: Exception) {
+                emit(UiState.Error(e.message.toString()))
+            }
         }
     }
 
     suspend fun createLevelChoice(choiceDetails: CreateLevelChoiceBody): Flow<UiState<CreateLevelChoiceResponse>> {
         return flow {
-            emit(UiState.Loading)
+            try {
 
-            val response = api.createLevelChoice(choiceDetails)
-            if (response.isSuccessful)
-                emit(UiState.Success(response.body()!!))
-            else
-                emit(UiState.Error(response.message()))
+                emit(UiState.Loading)
+
+                val response = api.createLevelChoice(choiceDetails)
+                if (response.isSuccessful)
+                    emit(UiState.Success(response.body()!!))
+                else
+                    emit(UiState.Error(response.message()))
+            } catch (e: Exception) {
+                emit(UiState.Error(e.message.toString()))
+            }
         }
     }
 
     suspend fun getDomainLevels(domainId: Int): Flow<UiState<GetDomainLevelsResponse>> {
         return flow {
-            emit(UiState.Loading)
+            try {
 
-            val response = api.getDomainLevels(domainId)
-            if (response.isSuccessful)
-                emit(UiState.Success(response.body()!!))
-            else
-                emit(UiState.Error(response.message()))
+                emit(UiState.Loading)
+
+                val response = api.getDomainLevels(domainId)
+                if (response.isSuccessful)
+                    emit(UiState.Success(response.body()!!))
+                else
+                    emit(UiState.Error(response.message()))
+            } catch (e: Exception) {
+                emit(UiState.Error(e.message.toString()))
+            }
         }
     }
 
     suspend fun getAiResponse(userId: Int): Flow<UiState<GetAiModelResponse>> {
         return flow {
-            emit(UiState.Loading)
+            try {
 
-            val response = api.getAiResponse(userId)
-            if (response.isSuccessful)
-                emit(UiState.Success(response.body()!!))
-            else
-                emit(UiState.Error(response.message()))
+                emit(UiState.Loading)
+
+                val response = api.getAiResponse(userId)
+                if (response.isSuccessful)
+                    emit(UiState.Success(response.body()!!))
+                else
+                    emit(UiState.Error(response.message()))
+            } catch (e: Exception) {
+                emit(UiState.Error(e.message.toString()))
+            }
 
         }
     }
 
     suspend fun deleteUser(userId: Int): Flow<UiState<Unit>> {
         return flow {
-            emit(UiState.Loading)
+            try {
 
-            val response = api.deleteUser(userId)
-            if (response.isSuccessful)
-                emit(UiState.Success(response.body()!!))
-            else
-                emit(UiState.Error(response.message()))
+                emit(UiState.Loading)
+
+                val response = api.deleteUser(userId)
+                if (response.isSuccessful)
+                    emit(UiState.Success(response.body()!!))
+                else
+                    emit(UiState.Error(response.message()))
+            } catch (e: Exception) {
+                emit(UiState.Error(e.message.toString()))
+            }
         }
     }
 }
