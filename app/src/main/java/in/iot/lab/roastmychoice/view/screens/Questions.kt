@@ -18,8 +18,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,22 +31,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import `in`.iot.lab.roastmychoice.R
-import `in`.iot.lab.roastmychoice.data.model.CreateLevelChoiceBody
+import `in`.iot.lab.roastmychoice.data.model.GetDomainLevelsResponse
 import `in`.iot.lab.roastmychoice.data.utils.UiState
+import `in`.iot.lab.roastmychoice.view.events.AppEvents
 import `in`.iot.lab.roastmychoice.view.navigation.AI_PROMPT_SCREEN
-import `in`.iot.lab.roastmychoice.vm.UserViewModel
+
 
 @Composable
 fun Questions(
-    viewModel: UserViewModel,
+    domainDataState: UiState<GetDomainLevelsResponse>,
     navController: NavController,
-    userId: Int,
-    domainId: Int
+    setEvent: (AppEvents) -> Unit
 ) {
-    val data = viewModel.getDomainLevelsState.collectAsState().value
-    when (data) {
+
+    when (domainDataState) {
         is UiState.Idle -> {
-            viewModel.getDomainLevels(domainId)
+            setEvent(AppEvents.FetchDomainData)
         }
 
         is UiState.Loading -> {
@@ -60,8 +59,8 @@ fun Questions(
         }
 
         is UiState.Success -> {
-            val currentQuestionIndex = remember { mutableStateOf(0) }
-            val currentQuestion = data.data.levels[currentQuestionIndex.value]
+            val currentQuestionIndex = remember { mutableIntStateOf(0) }
+            val currentQuestion = domainDataState.data.levels[currentQuestionIndex.intValue]
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -118,20 +117,23 @@ fun Questions(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             currentQuestion.options.forEachIndexed { index, question ->
-                                GradientButton(onClick = {
-                                    viewModel.createChoice(
-                                        CreateLevelChoiceBody(
-                                            levelId = currentQuestion.id,
-                                            selected = index,
-                                            userId = userId
+                                GradientButton(
+                                    onClick = {
+
+                                        setEvent(
+                                            AppEvents.CreateLevelChoice(
+                                                levelId = currentQuestion.id,
+                                                selected = index
+                                            )
                                         )
-                                    )
-                                    if (currentQuestionIndex.value < data.data.levels.size - 1) {
-                                        currentQuestionIndex.value++
-                                    } else {
-                                        navController.navigate(AI_PROMPT_SCREEN + "/${userId}")
-                                    }
-                                }, text = question)
+
+                                        if (currentQuestionIndex.intValue < domainDataState.data.levels.size - 1)
+                                            currentQuestionIndex.intValue++
+                                        else
+                                            navController.navigate(AI_PROMPT_SCREEN)
+                                    },
+                                    text = question
+                                )
                             }
                         }
                     }

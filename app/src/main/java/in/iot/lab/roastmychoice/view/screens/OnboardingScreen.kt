@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -19,31 +19,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import `in`.iot.lab.roastmychoice.data.model.CreateUserBody
+import `in`.iot.lab.roastmychoice.data.model.CreateUserResponse
 import `in`.iot.lab.roastmychoice.data.utils.UiState
 import `in`.iot.lab.roastmychoice.view.components.AppTextField
 import `in`.iot.lab.roastmychoice.view.components.AppFilterChip
 import `in`.iot.lab.roastmychoice.view.components.AppScreen
 import `in`.iot.lab.roastmychoice.view.components.OnBoardingImage
 import `in`.iot.lab.roastmychoice.view.components.PrimaryButton
+import `in`.iot.lab.roastmychoice.view.events.AppEvents
 import `in`.iot.lab.roastmychoice.view.navigation.QUESTION_SCREEN
-import `in`.iot.lab.roastmychoice.vm.UserViewModel
 
 
 @Composable
 fun OnboardingScreen(
     navController: NavController,
-    viewModel: UserViewModel
+    createUserState: UiState<CreateUserResponse>,
+    setEvent: (AppEvents) -> Unit
 ) {
-
-    val data = viewModel.createUserState.collectAsState().value
 
     AppScreen {
 
-        when (data) {
+        when (createUserState) {
 
             is UiState.Idle -> {
-                OnBoardingScreenIdle(viewModel)
+                OnBoardingScreenIdle(setEvent)
             }
 
             is UiState.Loading -> {
@@ -51,15 +50,12 @@ fun OnboardingScreen(
             }
 
             is UiState.Success -> {
-                val userId = data.data.id
-                val domainId = data.data.domainId
-
-                navController.navigate(QUESTION_SCREEN + "/${userId}/${domainId}")
-                viewModel.resetCreateUserState()
+                navController.navigate(QUESTION_SCREEN)
+                setEvent(AppEvents.ResetCreateState)
             }
 
-            else -> {
-
+            is UiState.Error -> {
+                Text(text = createUserState.message)
             }
         }
     }
@@ -69,7 +65,7 @@ fun OnboardingScreen(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun OnBoardingScreenIdle(
-    viewModel: UserViewModel
+    setEvent: (AppEvents) -> Unit
 ) {
 
     // User Input Fields
@@ -126,13 +122,7 @@ fun OnBoardingScreenIdle(
 
         // Primary Button
         PrimaryButton(text = "Get Started") {
-            viewModel.createUser(
-                userDetails = CreateUserBody(
-                    domainId = selectedChip,
-                    name = name,
-                    rollNo = rollNo
-                )
-            )
+            setEvent(AppEvents.CreateUser(name = name, rollNo = rollNo, domainId = selectedChip))
         }
     }
 }

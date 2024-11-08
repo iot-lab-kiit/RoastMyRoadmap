@@ -16,7 +16,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,17 +23,18 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import `in`.iot.lab.roastmychoice.data.model.GetAiModelResponse
 import `in`.iot.lab.roastmychoice.data.utils.UiState
 import `in`.iot.lab.roastmychoice.ui.theme.GradientBrush
+import `in`.iot.lab.roastmychoice.view.events.AppEvents
 import `in`.iot.lab.roastmychoice.view.navigation.ONBOARDING_SCREEN
-import `in`.iot.lab.roastmychoice.vm.UserViewModel
 
 
 @Composable
 fun AiPromptScreen(
     navController: NavController,
-    viewModel: UserViewModel,
-    userId: Int
+    roastDataState: UiState<GetAiModelResponse>,
+    setEvent: (AppEvents) -> Unit
 ) {
     Surface(
         modifier = Modifier.fillMaxSize()
@@ -58,10 +58,10 @@ fun AiPromptScreen(
                     )
 //                    .clip()
             ) {
-                val data = viewModel.aiResponseState.collectAsState().value
-                when (data) {
+
+                when (roastDataState) {
                     is UiState.Idle -> {
-                        viewModel.getAiResponse(userId)
+                        setEvent(AppEvents.FetchRoast)
                     }
 
                     is UiState.Loading -> {
@@ -69,7 +69,7 @@ fun AiPromptScreen(
                     }
 
                     is UiState.Success -> {
-                        Text(text = data.data.data)
+                        Text(text = roastDataState.data.data)
                     }
 
                     else -> {
@@ -80,7 +80,7 @@ fun AiPromptScreen(
 
             Button(
                 onClick = {
-                    viewModel.deleteUser(userId)
+                    setEvent(AppEvents.DeleteUser)
                     navController.navigate(ONBOARDING_SCREEN)
                 },
                 modifier = Modifier

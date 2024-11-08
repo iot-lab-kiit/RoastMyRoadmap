@@ -1,6 +1,5 @@
 package `in`.iot.lab.roastmychoice.vm
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,6 +11,7 @@ import `in`.iot.lab.roastmychoice.data.model.GetAiModelResponse
 import `in`.iot.lab.roastmychoice.data.model.GetDomainLevelsResponse
 import `in`.iot.lab.roastmychoice.data.repo.UserRepository
 import `in`.iot.lab.roastmychoice.data.utils.UiState
+import `in`.iot.lab.roastmychoice.view.events.AppEvents
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -20,103 +20,112 @@ import javax.inject.Inject
 @HiltViewModel
 class UserViewModel @Inject constructor(private val repository: UserRepository) : ViewModel() {
 
-    private val _createUserState: MutableStateFlow<UiState<CreateUserResponse>> = MutableStateFlow(UiState.Idle)
+    private val _createUserState: MutableStateFlow<UiState<CreateUserResponse>> =
+        MutableStateFlow(UiState.Idle)
     val createUserState = _createUserState.asStateFlow()
 
-    fun resetCreateUserState() {
-        _createUserState.value = UiState.Idle
-    }
+    private var userId: Int? = null
+    private var domainId: Int? = null
 
-    fun createUser(userDetails : CreateUserBody) {
-        createUserDB(userDetails)
-    }
-
-    private fun createUserDB(userDetails : CreateUserBody) {
-        _createUserState.value = UiState.Loading
-
+    private fun createUser(name: String, rollNo: String, domainId: Int) {
         viewModelScope.launch {
-            try {
-                val response = repository.createUser(userDetails)
-                _createUserState.value = response
-            }
-            catch (e: Exception) {
-                Log.d("UserViewModel", "createUserDetails: ${e.message}")
-            }
+            repository
+                .createUser(CreateUserBody(name = name, rollNo = rollNo, domainId = domainId))
+                .collect {
+                    _createUserState.value = it
+
+                    if (it is UiState.Success) {
+                        userId = it.data.id
+                        this@UserViewModel.domainId = it.data.domainId
+                    }
+                }
         }
     }
 
+    private val _domainState: MutableStateFlow<UiState<GetDomainLevelsResponse>> =
+        MutableStateFlow(UiState.Idle)
+    val domainState = _domainState.asStateFlow()
 
-    private val _createChoiceState: MutableStateFlow<UiState<CreateLevelChoiceResponse>> = MutableStateFlow(UiState.Idle)
+    private fun fetchDomainData() {
+        viewModelScope.launch {
+            repository
+                .getDomainLevels(domainId ?: 0)
+                .collect {
+                    _domainState.value = it
+                }
+        }
+    }
+
+    private val _createChoiceState: MutableStateFlow<UiState<CreateLevelChoiceResponse>> =
+        MutableStateFlow(UiState.Idle)
     val createChoiceState = _createChoiceState.asStateFlow()
 
-    fun createChoice(choiceDetails : CreateLevelChoiceBody) {
-        createChoiceDB(choiceDetails)
-    }
-
-    private fun createChoiceDB(choiceDetails : CreateLevelChoiceBody) {
-        _createChoiceState.value = UiState.Loading
-
+    private fun createChoice(levelId: Int, selected: Int) {
         viewModelScope.launch {
-            try {
-                _createChoiceState.value = repository.createLevelChoice(choiceDetails)
-            } catch (e: Exception) {
-                Log.d("UserViewModel", "createUserChoices: ${e.message}")
-//                _createChoiceState.value = UiState.Error(e.message.toString())
-            }
+            repository
+                .createLevelChoice(
+                    CreateLevelChoiceBody(
+                        levelId = levelId,
+                        selected = selected,
+                        userId = userId ?: 0
+                    )
+                )
+                .collect {
+                    _createChoiceState.value = it
+                }
         }
     }
 
-    private val _getDomainLevelsState: MutableStateFlow<UiState<GetDomainLevelsResponse>> = MutableStateFlow(UiState.Idle)
-    val getDomainLevelsState = _getDomainLevelsState.asStateFlow()
 
-    fun getDomainLevels(domainId: Int) {
-        getDomainLevelsDB(domainId)
-    }
+    private val _roastData: MutableStateFlow<UiState<GetAiModelResponse>> =
+        MutableStateFlow(UiState.Idle)
+    val roastData = _roastData.asStateFlow()
 
-    private fun getDomainLevelsDB(domainId: Int) {
-        _getDomainLevelsState.value = UiState.Loading
-
+    private fun fetchRoastData() {
         viewModelScope.launch {
-            try {
-                _getDomainLevelsState.value = repository.getDomainLevels(domainId)
-            } catch (e: Exception) {
-                Log.d("UpdateDetailsViewModel", "getDomainLevels: ${e.message}")
-//                _createUserState.value = UiState.Error(e.message.toString())
-            }
+            repository
+                .getAiResponse(userId ?: 0)
+                .collect {
+                    _roastData.value = it
+                }
         }
     }
 
-    private val _aiResponseState: MutableStateFlow<UiState<GetAiModelResponse>> = MutableStateFlow(UiState.Idle)
-    val aiResponseState = _aiResponseState.asStateFlow()
-
-    fun getAiResponse(userId: Int) {
-        getAiResponseDB(userId)
-    }
-
-    private fun getAiResponseDB(userId: Int) {
-        _aiResponseState.value = UiState.Loading
-
+    private fun deleteUser() {
         viewModelScope.launch {
-            try {
-                _aiResponseState.value = repository.getAiResponse(userId)
-            }
-            catch (e: Exception) {
-                Log.d("UpdateDetailsViewModel", "getAiResponse: ${e.message}")
-            }
+            repository
+                .deleteUser(userId ?: 0)
+                .collect {
+                    // To be done later
+                }
         }
     }
 
-    fun deleteUser(userId: Int) {
-        deleteUserDB(userId)
-    }
+    fun uiListener(event: AppEvents) {
 
-    private fun deleteUserDB(userId: Int) {
-        viewModelScope.launch {
-            try {
-                repository.deleteUser(userId)
+        when (event) {
+            is AppEvents.CreateUser -> {
+                createUser(name = event.name, rollNo = event.rollNo, domainId = event.domainId)
             }
-            catch (e: Exception) {
-                Log.d("UpdateDetailsViewModel", "deleteUser: ${e.message}")
+
+            is AppEvents.ResetCreateState -> {
+                _createUserState.value = UiState.Idle
+            }
+
+            is AppEvents.FetchDomainData -> {
+                fetchDomainData()
+            }
+
+            is AppEvents.CreateLevelChoice -> {
+                createChoice(levelId = event.levelId, selected = event.selected)
+            }
+
+            is AppEvents.FetchRoast -> {
+                fetchRoastData()
+            }
+
+            is AppEvents.DeleteUser -> {
+                deleteUser()
             }
         }
     }
