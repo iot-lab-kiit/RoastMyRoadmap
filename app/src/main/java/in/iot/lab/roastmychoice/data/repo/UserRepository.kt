@@ -11,6 +11,7 @@ import `in`.iot.lab.roastmychoice.state.UiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okio.IOException
+import retrofit2.HttpException
 import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 
@@ -27,12 +28,14 @@ class UserRepository @Inject constructor(private val api: ApiService) {
                     emit(UiState.Success(response.body()!!))
                 else
                     emit(UiState.Error(response.message()))
-            } catch (e: Exception) {
-                emit(UiState.Error(e.message.toString()))
+            } catch (e: HttpException) {
+                emit(UiState.NoInternetError)
             } catch (e: IOException) {
                 emit(UiState.NoInternetError)
             } catch (e: TimeoutException) {
                 emit(UiState.NoInternetError)
+            } catch (e: Exception) {
+                emit(UiState.Error(e.message.toString()))
             }
         }
     }
@@ -48,12 +51,14 @@ class UserRepository @Inject constructor(private val api: ApiService) {
                     emit(UiState.Success(response.body()!!))
                 else
                     emit(UiState.Error(response.message()))
-            } catch (e: Exception) {
-                emit(UiState.Error(e.message.toString()))
+            } catch (e: HttpException) {
+                emit(UiState.NoInternetError)
             } catch (e: IOException) {
                 emit(UiState.NoInternetError)
             } catch (e: TimeoutException) {
                 emit(UiState.NoInternetError)
+            } catch (e: Exception) {
+                emit(UiState.Error(e.message.toString()))
             }
         }
     }
@@ -69,12 +74,14 @@ class UserRepository @Inject constructor(private val api: ApiService) {
                     emit(UiState.Success(response.body()!!))
                 else
                     emit(UiState.Error(response.message()))
-            } catch (e: Exception) {
-                emit(UiState.Error(e.message.toString()))
+            } catch (e: HttpException) {
+                emit(UiState.NoInternetError)
             } catch (e: IOException) {
                 emit(UiState.NoInternetError)
             } catch (e: TimeoutException) {
                 emit(UiState.NoInternetError)
+            } catch (e: Exception) {
+                emit(UiState.Error(e.message.toString()))
             }
         }
     }
@@ -90,14 +97,15 @@ class UserRepository @Inject constructor(private val api: ApiService) {
                     emit(UiState.Success(response.body()!!))
                 else
                     emit(UiState.Error(response.message()))
-            } catch (e: Exception) {
-                emit(UiState.Error(e.message.toString()))
+            } catch (e: HttpException) {
+                emit(UiState.NoInternetError)
             } catch (e: IOException) {
                 emit(UiState.NoInternetError)
             } catch (e: TimeoutException) {
                 emit(UiState.NoInternetError)
+            } catch (e: Exception) {
+                emit(UiState.Error(e.message.toString()))
             }
-
         }
     }
 
@@ -112,12 +120,14 @@ class UserRepository @Inject constructor(private val api: ApiService) {
                     emit(UiState.Success(response.body()!!))
                 else
                     emit(UiState.Error(response.message()))
-            } catch (e: Exception) {
-                emit(UiState.Error(e.message.toString()))
+            } catch (e: HttpException) {
+                emit(UiState.NoInternetError)
             } catch (e: IOException) {
                 emit(UiState.NoInternetError)
             } catch (e: TimeoutException) {
                 emit(UiState.NoInternetError)
+            } catch (e: Exception) {
+                emit(UiState.Error(e.message.toString()))
             }
         }
     }
