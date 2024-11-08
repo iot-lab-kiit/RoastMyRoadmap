@@ -50,7 +50,7 @@ fun AiPromptScreen(
                     },
                     successBlock = {
                         navController.navigate(ONBOARDING_SCREEN)
-                        setEvent(AppEvents.ResetDeleteState)
+                        setEvent(AppEvents.ResetAppState)
                     },
                     onTryAgain = {
                         setEvent(AppEvents.DeleteUser)

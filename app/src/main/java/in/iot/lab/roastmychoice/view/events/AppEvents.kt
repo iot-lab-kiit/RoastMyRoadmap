@@ -8,5 +8,5 @@ sealed class AppEvents {
     data object ResetChoiceLevel : AppEvents()
     data object FetchRoast : AppEvents()
     data object DeleteUser : AppEvents()
-    data object ResetDeleteState : AppEvents()
+    data object ResetAppState : AppEvents()
 }

@@ -135,7 +135,14 @@ class UserViewModel @Inject constructor(private val repository: UserRepository) 
                 deleteUser()
             }
 
-            is AppEvents.ResetDeleteState -> {
+            is AppEvents.ResetAppState -> {
+                _createUserState.value = UiState.Idle
+                userId = null
+                domainId = null
+
+                _domainState.value = UiState.Idle
+                _createChoiceState.value = UiState.Idle
+                _roastData.value = UiState.Idle
                 _deleteState.value = UiState.Idle
             }
         }
