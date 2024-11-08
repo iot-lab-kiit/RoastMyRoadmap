@@ -13,7 +13,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import `in`.iot.lab.roastmychoice.R
 import `in`.iot.lab.roastmychoice.view.components.AppScreen
@@ -31,7 +30,7 @@ import `in`.iot.lab.roastmychoice.view.theme.RoastMyChoiceTheme
 private fun DefaultPreview3() {
     RoastMyChoiceTheme {
         AppScreen {
-            LoadingAnimation {}
+            LoadingAnimation()
         }
     }
 }
@@ -39,12 +38,9 @@ private fun DefaultPreview3() {
 
 @Composable
 fun LoadingAnimation(
-    modifier: Modifier = Modifier,
-    onAnimationComplete: (() -> Unit)? = null
+    modifier: Modifier = Modifier
 ) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_anim))
-    val progress by animateLottieCompositionAsState(composition)
-
 
     Column(
         modifier = modifier.padding(16.dp),
@@ -53,11 +49,8 @@ fun LoadingAnimation(
     ) {
         LottieAnimation(
             composition = composition,
+            iterations = 4,
             modifier = Modifier.size(200.dp)
         )
-    }
-
-    onAnimationComplete?.let {
-        if (progress == 1.0f) it()
     }
 }
