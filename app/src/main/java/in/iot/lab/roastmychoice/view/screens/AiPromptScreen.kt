@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +17,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import `in`.iot.lab.roastmychoice.data.model.GetAiModelResponse
+import `in`.iot.lab.roastmychoice.state.HandleUiState
 import `in`.iot.lab.roastmychoice.state.UiState
 import `in`.iot.lab.roastmychoice.view.components.AppScreen
 import `in`.iot.lab.roastmychoice.view.components.PrimaryButton
@@ -35,48 +35,32 @@ fun AiPromptScreen(
 ) {
 
     AppScreen {
-        when (roastDataState) {
-            is UiState.Idle -> {
+        roastDataState.HandleUiState(
+            idleBlock = {
                 setEvent(AppEvents.FetchRoast)
-            }
+            },
+            successBlock = {
 
-            is UiState.Loading -> {
-                CircularProgressIndicator()
-            }
-
-            is UiState.Success -> {
-
-                when (deleteUserState) {
-                    is UiState.Idle -> {
+                deleteUserState.HandleUiState(
+                    idleBlock = {
                         AiPromptScreenIdle(
-                            roastData = roastDataState.data,
+                            roastData = it,
                             setEvent = setEvent
                         )
-                    }
-
-                    is UiState.Loading -> {
-                        CircularProgressIndicator()
-                    }
-
-                    is UiState.Success -> {
+                    },
+                    successBlock = {
                         navController.navigate(ONBOARDING_SCREEN)
                         setEvent(AppEvents.ResetDeleteState)
+                    },
+                    onTryAgain = {
+                        setEvent(AppEvents.DeleteUser)
                     }
-
-                    is UiState.NoInternetError -> {
-
-                    }
-
-                    is UiState.Error -> {
-
-                    }
-                }
+                )
+            },
+            onTryAgain = {
+                setEvent(AppEvents.FetchRoast)
             }
-
-            else -> {
-                Text(text = "Network Error")
-            }
-        }
+        )
     }
 }
 

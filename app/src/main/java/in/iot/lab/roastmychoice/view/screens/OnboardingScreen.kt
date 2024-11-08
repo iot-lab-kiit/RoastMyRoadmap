@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -31,6 +29,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import `in`.iot.lab.roastmychoice.data.model.CreateUserResponse
+import `in`.iot.lab.roastmychoice.state.HandleUiState
 import `in`.iot.lab.roastmychoice.state.UiState
 import `in`.iot.lab.roastmychoice.view.components.AppTextField
 import `in`.iot.lab.roastmychoice.view.components.AppFilterChip
@@ -54,31 +53,18 @@ fun OnboardingScreen(
     }
 
     AppScreen {
-
-        when (createUserState) {
-
-            is UiState.Idle -> {
+        createUserState.HandleUiState(
+            idleBlock = {
                 OnBoardingScreenIdle(setEvent)
-            }
-
-            is UiState.Loading -> {
-                CircularProgressIndicator()
-            }
-
-            is UiState.Success -> {
+            },
+            successBlock = {
                 navController.navigate(QUESTION_SCREEN)
                 setEvent(AppEvents.ResetCreateState)
+            },
+            onTryAgain = {
+                setEvent(AppEvents.ResetCreateState)
             }
-
-            is UiState.Error -> {
-                // TODO :- Show Error Dialog here
-                Text(text = createUserState.message)
-            }
-
-            is UiState.NoInternetError -> {
-                // TODO :- Show Internet Error Animation
-            }
-        }
+        )
     }
 }
 
@@ -102,7 +88,7 @@ fun OnBoardingScreenIdle(
             .fillMaxSize()
             .background(Color(0xFF041529)),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(24.dp)
+        verticalArrangement = Arrangement.spacedBy(24.dp, alignment = Alignment.CenterVertically)
     ) {
 
         // Innovance Logo

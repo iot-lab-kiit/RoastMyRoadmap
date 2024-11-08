@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import `in`.iot.lab.roastmychoice.R
 import `in`.iot.lab.roastmychoice.data.model.GetDomainLevelsResponse
+import `in`.iot.lab.roastmychoice.state.HandleUiState
 import `in`.iot.lab.roastmychoice.state.UiState
 import `in`.iot.lab.roastmychoice.view.components.AppScreen
 import `in`.iot.lab.roastmychoice.view.components.PrimaryButton
@@ -42,32 +42,21 @@ fun Questions(
 ) {
 
     AppScreen {
-
-        when (domainDataState) {
-            is UiState.Idle -> {
+        domainDataState.HandleUiState(
+            idleBlock = {
                 setEvent(AppEvents.FetchDomainData)
-            }
-
-            is UiState.Loading -> {
-                CircularProgressIndicator()
-            }
-
-            is UiState.Success -> {
+            },
+            successBlock = {
                 QuestionScreenIdle(
-                    domainData = domainDataState.data,
+                    domainData = it,
                     navController = navController,
                     setEvent = setEvent
                 )
-            }
-
-            is UiState.NoInternetError -> {
-
-            }
-
-            is UiState.Error -> {
+            },
+            onTryAgain = {
 
             }
-        }
+        )
     }
 }
 
