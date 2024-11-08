@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import `in`.iot.lab.roastmychoice.data.model.CreateUserResponse
-import `in`.iot.lab.roastmychoice.data.utils.UiState
+import `in`.iot.lab.roastmychoice.state.UiState
 import `in`.iot.lab.roastmychoice.view.components.AppTextField
 import `in`.iot.lab.roastmychoice.view.components.AppFilterChip
 import `in`.iot.lab.roastmychoice.view.components.AppScreen
@@ -56,6 +56,10 @@ fun OnboardingScreen(
 
             is UiState.Error -> {
                 Text(text = createUserState.message)
+            }
+
+            is UiState.NoInternetError -> {
+
             }
         }
     }

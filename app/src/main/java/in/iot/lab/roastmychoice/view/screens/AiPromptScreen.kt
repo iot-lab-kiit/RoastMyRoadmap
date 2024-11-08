@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import `in`.iot.lab.roastmychoice.data.model.GetAiModelResponse
-import `in`.iot.lab.roastmychoice.data.utils.UiState
+import `in`.iot.lab.roastmychoice.state.UiState
 import `in`.iot.lab.roastmychoice.ui.theme.GradientBrush
 import `in`.iot.lab.roastmychoice.view.events.AppEvents
 import `in`.iot.lab.roastmychoice.view.navigation.ONBOARDING_SCREEN

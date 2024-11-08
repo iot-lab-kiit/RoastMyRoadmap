@@ -7,9 +7,11 @@ import `in`.iot.lab.roastmychoice.data.model.CreateUserResponse
 import `in`.iot.lab.roastmychoice.data.model.GetAiModelResponse
 import `in`.iot.lab.roastmychoice.data.model.GetDomainLevelsResponse
 import `in`.iot.lab.roastmychoice.data.remote.ApiService
-import `in`.iot.lab.roastmychoice.data.utils.UiState
+import `in`.iot.lab.roastmychoice.state.UiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import okio.IOException
+import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(private val api: ApiService) {
@@ -27,6 +29,10 @@ class UserRepository @Inject constructor(private val api: ApiService) {
                     emit(UiState.Error(response.message()))
             } catch (e: Exception) {
                 emit(UiState.Error(e.message.toString()))
+            } catch (e: IOException) {
+                emit(UiState.NoInternetError)
+            } catch (e: TimeoutException) {
+                emit(UiState.NoInternetError)
             }
         }
     }
@@ -44,6 +50,10 @@ class UserRepository @Inject constructor(private val api: ApiService) {
                     emit(UiState.Error(response.message()))
             } catch (e: Exception) {
                 emit(UiState.Error(e.message.toString()))
+            } catch (e: IOException) {
+                emit(UiState.NoInternetError)
+            } catch (e: TimeoutException) {
+                emit(UiState.NoInternetError)
             }
         }
     }
@@ -61,6 +71,10 @@ class UserRepository @Inject constructor(private val api: ApiService) {
                     emit(UiState.Error(response.message()))
             } catch (e: Exception) {
                 emit(UiState.Error(e.message.toString()))
+            } catch (e: IOException) {
+                emit(UiState.NoInternetError)
+            } catch (e: TimeoutException) {
+                emit(UiState.NoInternetError)
             }
         }
     }
@@ -78,6 +92,10 @@ class UserRepository @Inject constructor(private val api: ApiService) {
                     emit(UiState.Error(response.message()))
             } catch (e: Exception) {
                 emit(UiState.Error(e.message.toString()))
+            } catch (e: IOException) {
+                emit(UiState.NoInternetError)
+            } catch (e: TimeoutException) {
+                emit(UiState.NoInternetError)
             }
 
         }
@@ -96,6 +114,10 @@ class UserRepository @Inject constructor(private val api: ApiService) {
                     emit(UiState.Error(response.message()))
             } catch (e: Exception) {
                 emit(UiState.Error(e.message.toString()))
+            } catch (e: IOException) {
+                emit(UiState.NoInternetError)
+            } catch (e: TimeoutException) {
+                emit(UiState.NoInternetError)
             }
         }
     }

@@ -10,7 +10,7 @@ import `in`.iot.lab.roastmychoice.data.model.CreateUserResponse
 import `in`.iot.lab.roastmychoice.data.model.GetAiModelResponse
 import `in`.iot.lab.roastmychoice.data.model.GetDomainLevelsResponse
 import `in`.iot.lab.roastmychoice.data.repo.UserRepository
-import `in`.iot.lab.roastmychoice.data.utils.UiState
+import `in`.iot.lab.roastmychoice.state.UiState
 import `in`.iot.lab.roastmychoice.view.events.AppEvents
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
