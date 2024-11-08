@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -46,6 +47,10 @@ fun Questions(
     setEvent: (AppEvents) -> Unit
 ) {
 
+    LaunchedEffect(Unit) {
+        setEvent(AppEvents.FetchDomainData)
+    }
+
     BackHandler {
         setEvent(AppEvents.DeleteUser)
     }
@@ -63,9 +68,6 @@ fun Questions(
         )
 
         domainDataState.HandleUiState(
-            idleBlock = {
-                setEvent(AppEvents.FetchDomainData)
-            },
             successBlock = { domainData ->
 
                 // Current Question Index
