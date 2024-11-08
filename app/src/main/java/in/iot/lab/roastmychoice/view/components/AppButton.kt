@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import `in`.iot.lab.roastmychoice.view.theme.GradientBrush
 
 
@@ -35,11 +34,9 @@ fun PrimaryButton(
         contentPadding = PaddingValues()
     ) {
         Text(
-            modifier = Modifier
-                .padding(vertical = 16.dp),
+            modifier = Modifier.padding(16.dp),
             text = text,
-            color = Color.White,
-            fontSize = 22.sp
+            color = Color.White
         )
     }
 }
