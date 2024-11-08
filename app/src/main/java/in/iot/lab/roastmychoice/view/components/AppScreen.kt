@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import `in`.iot.lab.roastmychoice.ui.theme.RoastMyChoiceTheme
+import `in`.iot.lab.roastmychoice.view.theme.RoastMyChoiceTheme
 
 
 @Composable

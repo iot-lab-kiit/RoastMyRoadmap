@@ -1,4 +1,4 @@
-package `in`.iot.lab.roastmychoice.ui.theme
+package `in`.iot.lab.roastmychoice.view.theme
 
 import android.app.Activity
 import android.os.Build

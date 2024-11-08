@@ -6,7 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import dagger.hilt.android.AndroidEntryPoint
-import `in`.iot.lab.roastmychoice.ui.theme.RoastMyChoiceTheme
+import `in`.iot.lab.roastmychoice.view.theme.RoastMyChoiceTheme
 import `in`.iot.lab.roastmychoice.view.navigation.AppNavigation
 
 @AndroidEntryPoint
