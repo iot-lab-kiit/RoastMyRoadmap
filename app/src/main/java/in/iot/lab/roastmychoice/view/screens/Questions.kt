@@ -35,6 +35,7 @@ import androidx.navigation.NavController
 import `in`.iot.lab.roastmychoice.R
 import `in`.iot.lab.roastmychoice.data.model.CreateLevelChoiceBody
 import `in`.iot.lab.roastmychoice.data.utils.UiState
+import `in`.iot.lab.roastmychoice.view.navigation.AppScreens
 import `in`.iot.lab.roastmychoice.vm.UserViewModel
 
 @Composable
@@ -122,6 +123,9 @@ fun Questions(
                                     )
                                     if (currentQuestionIndex.value < data.data.levels.size - 1) {
                                         currentQuestionIndex.value++
+                                    }
+                                    else {
+                                        navController.navigate(AppScreens.AiPromptScreen.route + "/${userId}")
                                     }
                                 }, text = question)
                             }

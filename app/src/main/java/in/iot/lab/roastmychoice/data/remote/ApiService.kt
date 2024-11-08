@@ -4,6 +4,7 @@ import `in`.iot.lab.roastmychoice.data.model.CreateLevelChoiceBody
 import `in`.iot.lab.roastmychoice.data.model.CreateLevelChoiceResponse
 import `in`.iot.lab.roastmychoice.data.model.CreateUserBody
 import `in`.iot.lab.roastmychoice.data.model.CreateUserResponse
+import `in`.iot.lab.roastmychoice.data.model.GetAiModelResponse
 import `in`.iot.lab.roastmychoice.data.model.GetDomainLevelsResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -30,4 +31,8 @@ interface ApiService {
         @Path("domainId") domainId: Int
     ): Response<GetDomainLevelsResponse>
 
+    @GET("api/v1/openai-response/{userId}")
+    suspend fun getAiResponse(
+        @Path("userId") userId: Int
+    ): Response<GetAiModelResponse>
 }

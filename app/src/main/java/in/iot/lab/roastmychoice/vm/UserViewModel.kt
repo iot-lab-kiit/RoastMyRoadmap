@@ -8,6 +8,7 @@ import `in`.iot.lab.roastmychoice.data.model.CreateLevelChoiceBody
 import `in`.iot.lab.roastmychoice.data.model.CreateLevelChoiceResponse
 import `in`.iot.lab.roastmychoice.data.model.CreateUserBody
 import `in`.iot.lab.roastmychoice.data.model.CreateUserResponse
+import `in`.iot.lab.roastmychoice.data.model.GetAiModelResponse
 import `in`.iot.lab.roastmychoice.data.model.GetDomainLevelsResponse
 import `in`.iot.lab.roastmychoice.data.repo.UserRepository
 import `in`.iot.lab.roastmychoice.data.utils.UiState
@@ -81,6 +82,26 @@ class UserViewModel @Inject constructor(private val repository: UserRepository) 
             } catch (e: Exception) {
                 Log.d("UpdateDetailsViewModel", "getDomainLevels: ${e.message}")
 //                _createUserState.value = UiState.Error(e.message.toString())
+            }
+        }
+    }
+
+    private val _aiResponseState: MutableStateFlow<UiState<GetAiModelResponse>> = MutableStateFlow(UiState.Idle)
+    val aiResponseState = _aiResponseState.asStateFlow()
+
+    fun getAiResponse(userId: Int) {
+        getAiResponseDB(userId)
+    }
+
+    private fun getAiResponseDB(userId: Int) {
+        _aiResponseState.value = UiState.Loading
+
+        viewModelScope.launch {
+            try {
+                _aiResponseState.value = repository.getAiResponse(userId)
+            }
+            catch (e: Exception) {
+                Log.d("UpdateDetailsViewModel", "getAiResponse: ${e.message}")
             }
         }
     }

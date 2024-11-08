@@ -11,17 +11,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import `in`.iot.lab.roastmychoice.data.utils.UiState
+import `in`.iot.lab.roastmychoice.vm.UserViewModel
 
 
 @Composable
 fun AiPromptScreen(
     navController: NavController,
+    viewModel: UserViewModel = hiltViewModel(),
     userId: Int
 ) {
 
@@ -48,11 +53,26 @@ fun AiPromptScreen(
                     )
 //                    .clip()
             ) {
-                Text(
-                    text = "\n" +
-                            "${userId} Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam semper mattis tortor sit amet convallis. Ut eget tincidunt nisi, quis aliquet velit. Mauris quis purus elementum, tincidunt metus id, finibus ante. Ut a efficitur libero. Aliquam id justo at nulla vehicula congue in in metus. Cras eget lacus lectus. Curabitur."
-                )
+                val data = viewModel.aiResponseState.collectAsState().value
+                when (data) {
+                    is UiState.Idle -> {
+                        viewModel.getAiResponse(userId)
+                    }
+
+                    is UiState.Loading -> {
+                        Text(text = "Loading")
+                    }
+
+                    is UiState.Success -> {
+                        Text(text = data.data.data)
+                    }
+
+                    else -> {
+                        Text(text = "Network Error")
+                    }
+                }
             }
+
         }
     }
 }
