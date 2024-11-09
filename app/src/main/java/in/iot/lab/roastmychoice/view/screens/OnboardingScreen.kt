@@ -26,14 +26,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import `in`.iot.lab.roastmychoice.data.model.CreateUserResponse
 import `in`.iot.lab.roastmychoice.state.HandleUiState
 import `in`.iot.lab.roastmychoice.state.UiState
-import `in`.iot.lab.roastmychoice.view.components.AppTextField
 import `in`.iot.lab.roastmychoice.view.components.AppFilterChip
 import `in`.iot.lab.roastmychoice.view.components.AppScreen
+import `in`.iot.lab.roastmychoice.view.components.AppTextField
 import `in`.iot.lab.roastmychoice.view.components.OnBoardingImage
 import `in`.iot.lab.roastmychoice.view.components.PrimaryButton
 import `in`.iot.lab.roastmychoice.view.events.AppEvents
@@ -97,7 +98,7 @@ fun OnBoardingScreenIdle(
         // User ID Text Field with Gradient Border Only
         AppTextField(
             value = name,
-            title = "User name",
+            title = "Enter your name",
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             keyboardActions = KeyboardActions(onNext = {
                 focusManager.moveFocus(FocusDirection.Down)
@@ -108,8 +109,9 @@ fun OnBoardingScreenIdle(
         // Roll Number
         AppTextField(
             value = rollNo,
-            title = "Roll Number",
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            title = "Enter Roll Number",
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Number),
             keyboardActions = KeyboardActions(onDone = {
                 focusManager.clearFocus()
             }),

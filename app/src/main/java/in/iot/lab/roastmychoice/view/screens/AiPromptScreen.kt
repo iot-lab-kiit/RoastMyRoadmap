@@ -23,9 +23,9 @@ import `in`.iot.lab.roastmychoice.state.HandleUiState
 import `in`.iot.lab.roastmychoice.state.UiState
 import `in`.iot.lab.roastmychoice.view.components.AppScreen
 import `in`.iot.lab.roastmychoice.view.components.PrimaryButton
-import `in`.iot.lab.roastmychoice.view.theme.GradientBrush
 import `in`.iot.lab.roastmychoice.view.events.AppEvents
 import `in`.iot.lab.roastmychoice.view.navigation.ONBOARDING_SCREEN
+import `in`.iot.lab.roastmychoice.view.theme.GradientBrush
 
 
 @Composable
@@ -88,6 +88,9 @@ fun AiPromptScreenIdle(
             .fillMaxSize()
             .background(color = Color.Black)
     ) {
+
+        Text("Let's see what the model has to say about your choices 💀",
+            modifier = Modifier.padding(start = 24.dp, end = 24.dp))
 
         // Ai Generated Response
         OutlinedCard(
