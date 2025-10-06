@@ -71,6 +71,7 @@ RoastMyRoadmap/
 ├── docs/                    # Documentation and design resources
 ├── build.gradle.kts         # Gradle configuration file
 ├── settings.gradle.kts      # Project setup file
+├── CONTRIBUTING.md          # Contributing Guidelines
 └── README.md                # Project overview and info
 ```
 
