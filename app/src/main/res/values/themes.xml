@@ -2,4 +2,10 @@
 <resources>
 
     <style name="Theme.RoastMyChoice" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/bluescreen</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/innovance_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.RoastMyChoice</item>
+    </style>
 </resources>
